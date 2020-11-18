@@ -61,7 +61,31 @@ void move_white(tgame result, int rows, int cols , int std_x, int std_y, int arr
                 result.arr[std_x][std_y]=0;
                 result.arr[arr_x][arr_y]=2;
             }else if(result.arr[std_x][std_y]==2 && result.arr[arr_x][arr_y]==3){
-                if(result.arr[arr_x+1][arr_y+1]==0 && result.arr[arr_x+1][arr_y-1]!=0)
+                if(result.arr[arr_x-1][arr_y+1]==0 && result.arr[arr_x-1][arr_y-1]!=0){
+                    white++;
+                    result.arr[std_x][std_y]=0;
+                    result.arr[arr_x][arr_y]=0;
+                    result.arr[arr_x-1][arr_y+1]=2;
+                }else if(result.arr[arr_x-1][arr_y+1]!=0 && result.arr[arr_x-1][arr_y-1]==0){
+                    white++;
+                    result.arr[std_x][std_y]=0;
+                    result.arr[arr_x][arr_y]=0;
+                    result.arr[arr_x-1][arr_y-1]=2;
+                }else if(result.arr[arr_x-1][arr_y+1]!=0 && result.arr[arr_x-1][arr_y-1]!=0){
+                    srand(time(NULL));
+                    int rnd= rand()%2;
+                    if(rnd==0){
+                        white++;
+                        result.arr[std_x][std_y]=0;
+                        result.arr[arr_x][arr_y]=0;
+                        result.arr[arr_x-1][arr_y-1]=2;
+                    }else {
+                        white++;
+                        result.arr[std_x][std_y]=0;
+                        result.arr[arr_x][arr_y]=0;
+                        result.arr[arr_x-1][arr_y+1]=2;
+                    }
+                }
             }
         }
     }
@@ -78,10 +102,12 @@ void move_black(tgame result, int rows, int cols , int std_x, int std_y, int arr
                 if(result.arr[arr_x+1][arr_y+1]==0 && result.arr[arr_x+1][arr_y-1]!=0){
                     black++;
                     result.arr[std_x][std_y]=0;
+                    result.arr[arr_x][arr_y]=0;
                     result.arr[arr_x+1][arr_y+1]=3;
                 }else if(result.arr[arr_x+1][arr_y-1]==0 && result.arr[arr_x+1][arr_y+1]!=0){
                     black++;
                     result.arr[std_x][std_y]=0;
+                    result.arr[arr_x][arr_y]=0;
                     result.arr[arr_x+1][arr_y-1]=3;
                 }else if (result.arr[arr_x+1][arr_y+1]==0 && result.arr[arr_x+1][arr_y-1]==0 ){
                     srand(time(NULL));
@@ -89,10 +115,12 @@ void move_black(tgame result, int rows, int cols , int std_x, int std_y, int arr
                     if(rnd==0){
                         black++;
                         result.arr[std_x][std_y]=0;
+                        result.arr[arr_x][arr_y]=0;
                         result.arr[arr_x+1][arr_y-1]=3;
                     }else {
                         black++;
                         result.arr[std_x][std_y]=0;
+                        result.arr[arr_x][arr_y]=0;
                         result.arr[arr_x+1][arr_y+1]=3;
                     }
                 }
@@ -136,9 +164,48 @@ void print(tgame result, int rows , int cols){
 
     }
 }
+int convert(){
+    char a;
+    int i;
+    scanf("%c",&a);
+    if(a>='A' && a<='G'){
+        return i=a-65;
+    }else if(a>='a' && a<='g'){
+        return i=a-97;
+    } else{
+        convert();
+    }
+}
 int game(tgame result){
+    int arr_x,arr_y,std_x,std_y;
     while(black!=12 || white!=12){
-        move_black(result,7,7,2,0,3,1);
+        printf("Write the coordinate of white pawn\n");
+        printf("X:");
+        scanf("%d",&std_x);
+        printf("Y:");
+        std_y=convert();
+        printf("\n");
+        printf("Write the coordinate of white box to go\n");
+        printf("X:");
+        scanf("%d",&arr_x);
+        printf("Y:");
+        arr_y=convert();
+        printf("\n");
+        move_white(result,7,7,std_x-1,std_y,arr_x-1,arr_y);
+        print(result,7,7);
+        printf("Write the coordinate of black pawn\n");
+        printf("X:");
+        scanf("%d",&std_x);
+        printf("Y:");
+        std_y=convert();
+        printf("\n");
+        printf("Write the coordinate of white box to go\n");
+        printf("X:");
+        scanf("%d",&arr_x);
+        printf("Y:");
+        arr_y=convert();
+        printf("\n");
+        move_black(result,7,7,std_x-1,std_y,arr_x-1,arr_y);
         print(result,7,7);
     }
     if(white>black){
@@ -150,12 +217,14 @@ int main() {
     tgame *arr;
     arr=create(7,7);
     print(*arr,7,7);
+
     int winner=game(*arr);
     if(winner==1){
         printf("White gamer is the winner!!!");
     }else {
         printf("Black player is the winner!!");
     }
+
 
 
     return 0;
