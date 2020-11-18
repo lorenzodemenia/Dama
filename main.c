@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <time.h>
 struct dama{
     int **arr;
 };
 typedef struct dama  tgame;
+
+int white=0,black=0;
+
 
 tgame* create(int cols,int rows){
     tgame *result;
@@ -50,12 +54,49 @@ tgame* create(int cols,int rows){
     return result;
 
 }
-/*
-void move_black(tgame result, int rows , int cols, int arr_x, int arr_y, int std_x, int std_y){
+void move_white(tgame result, int rows, int cols , int std_x, int std_y, int arr_x, int arr_y){
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            if(result.arr[std_x][std_y]==2 && result.arr[arr_x][arr_y]==0){
+                result.arr[std_x][std_y]=0;
+                result.arr[arr_x][arr_y]=2;
+            }else if(result.arr[std_x][std_y]==2 && result.arr[arr_x][arr_y]==3){
+                if(result.arr[arr_x+1][arr_y+1]==0 && result.arr[arr_x+1][arr_y-1]!=0)
+            }
+        }
+    }
+}
+
+void move_black(tgame result, int rows, int cols , int std_x, int std_y, int arr_x, int arr_y){
 
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j <cols ; ++j) {
-            if(result.arr[std_x][std_y]==)
+            if(result.arr[std_x][std_y]==3 && result.arr[arr_x][arr_y]==0 ){
+                result.arr[std_x][std_y]=0;
+                result.arr[arr_x][arr_y]=3;
+            }else if(result.arr[std_x][std_y]==3 && result.arr[arr_x][arr_y]==2){
+                if(result.arr[arr_x+1][arr_y+1]==0 && result.arr[arr_x+1][arr_y-1]!=0){
+                    black++;
+                    result.arr[std_x][std_y]=0;
+                    result.arr[arr_x+1][arr_y+1]=3;
+                }else if(result.arr[arr_x+1][arr_y-1]==0 && result.arr[arr_x+1][arr_y+1]!=0){
+                    black++;
+                    result.arr[std_x][std_y]=0;
+                    result.arr[arr_x+1][arr_y-1]=3;
+                }else if (result.arr[arr_x+1][arr_y+1]==0 && result.arr[arr_x+1][arr_y-1]==0 ){
+                    srand(time(NULL));
+                    int rnd= rand()%2;
+                    if(rnd==0){
+                        black++;
+                        result.arr[std_x][std_y]=0;
+                        result.arr[arr_x+1][arr_y-1]=3;
+                    }else {
+                        black++;
+                        result.arr[std_x][std_y]=0;
+                        result.arr[arr_x+1][arr_y+1]=3;
+                    }
+                }
+            }
 
         }
 
@@ -64,7 +105,6 @@ void move_black(tgame result, int rows , int cols, int arr_x, int arr_y, int std
 
 }
 
-*/
 
 
 
@@ -96,10 +136,26 @@ void print(tgame result, int rows , int cols){
 
     }
 }
+int game(tgame result){
+    while(black!=12 || white!=12){
+        move_black(result,7,7,2,0,3,1);
+        print(result,7,7);
+    }
+    if(white>black){
+        return 1;
+    }else
+        return 0;
+}
 int main() {
     tgame *arr;
     arr=create(7,7);
     print(*arr,7,7);
+    int winner=game(*arr);
+    if(winner==1){
+        printf("White gamer is the winner!!!");
+    }else {
+        printf("Black player is the winner!!");
+    }
 
 
     return 0;
