@@ -10,7 +10,7 @@ int main() {
     if(winner==1){
         printf("White gamer is the winner!!!");
     }else {
-        printf("Black player is the winner!!");
+        printf("Black player is the winner!!!");
     }
 
 

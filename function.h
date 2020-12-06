@@ -132,10 +132,6 @@ void move_black(tgame result, int std_x, int std_y, int arr_x, int arr_y){
             }
         }
     }
-
-
-
-
 }
 
 
